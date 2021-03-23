@@ -1,0 +1,83 @@
+<div *ngIf="error" class="bg-danger pt-3 pb-3 pl-3 pr-3 animate__animated animate__fadeInDown" style="box-sizing: border-box;">{{error}}</div>
+<div *ngIf="success" class="bg-success pt-3 pb-3 pl-3 pr-3 animate__animated animate__fadeInDown" style="box-sizing: border-box;">{{success}}</div>
+
+<div id="theList">
+  <h2 class="text-center">The List</h2>
+
+  <div class="list-group">
+    <div *ngFor="let item of cars;let i = index;" class="list-group-item row">
+      <div class="col-md-4 d-inline-block">
+        <input type="text"
+                [(ngModel)]="cars[i].model"
+                class="form-control"
+                required
+                pattern="^[a-zA-Z]+$"
+                #model="ngModel"
+                [ngClass]="{ 'is-invalid': model.touched && model.invalid }">
+      </div>
+      <div class="col-md-4 d-inline-block">
+        <input type="number"
+                [(ngModel)]="cars[i].price"
+                class="form-control"
+                required
+                #price="ngModel"
+                [ngClass]="{ 'is-invalid': price.touched && price.invalid }">
+      </div>
+      <div class="col-md-4 d-inline-block">
+        <input type="button"
+                value="Update"
+                class="btn btn-success btn-sm mr-3"
+                [disabled]="model.invalid || price.invalid"
+                (click)="updateCar(model, price, item.id)">
+
+        <input type="button"
+                value="Delete"
+                class="btn btn-danger btn-sm"
+                (click)="deleteCar(item.id)">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="theForm" class="w-75 mx-auto" >
+  <h2 class="text-center mt-5">The form</h2>
+
+    <form #f="ngForm" name="theForm" (submit)="addCar(f)">
+      <div class="form-group col-md-6 mx-auto">
+        <label>Model</label>
+        <input type="text"
+              class="form-control"
+              name="model"
+              [(ngModel)]="car.model"
+              #carModel="ngModel"
+              required
+              autocomplete="off"
+              pattern="^[a-zA-Z]+$">
+        <span class="help-block danger" *ngIf="carModel.errors?.required && carModel.touched">
+          The model name is required
+        </span>
+        <span class="help-block danger" *ngIf="carModel.errors?.pattern && carModel.touched">
+          The model name can only contain the letters a-z or A-Z
+        </span>
+      </div>
+
+      <div class="form-group col-md-6 mx-auto">
+        <label>Price</label>
+        <input type="number"
+              class="form-control"
+              name="price"
+              required
+              autocomplete="off"
+              [(ngModel)]="car.price"
+              #carPrice="ngModel">
+        <span class="help-block danger" *ngIf="carPrice.errors?.required && carPrice.touched">
+          The price is required
+        </span>
+      </div>
+
+      <button
+          class="btn btn-primary btn-sm" style="margin-left: 270px;"
+          [disabled]="f.invalid">Add</button>
+    </form>
+</div>
